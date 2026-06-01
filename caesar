@@ -1,0 +1,71 @@
+#include <cs50.h>
+#include <ctype.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+char rotate(int k, char ch);
+bool only_digits(string s);
+int main(int argc, string argv[])
+{
+
+    if (argc != 2)
+    {
+        printf("Usage: ./caesar key\n");
+        return 1;
+    }
+    bool flag = only_digits(argv[1]);
+    if (flag == false)
+    {
+        printf("Usage: ./caesar key\n");
+        return 1;
+    }
+    int key = atoi(argv[1]);
+    string input = get_string("plain text:");
+    printf("ciphertext: ");
+
+    for (int i = 0, n = strlen(input); i < n; i++)
+    {
+        printf("%c", rotate(key, input[i]));
+    }
+    printf("\n");
+}
+bool only_digits(string s)
+{
+    int f = 0;
+    for (int i = 0, n = strlen(s); i < n; i++)
+    {
+        if (isdigit(s[i]) == false)
+        {
+            f = 1;
+            break;
+        }
+    }
+
+    if (f == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+char rotate(int k, char ch)
+{
+    char rv;
+    if (isupper(ch))
+    {
+        rv = ((ch - 'A') + k) % 26 + 'A';
+        return rv;
+    }
+    else if (islower(ch))
+    {
+        rv = ((ch - 'a') + k) % 26 + 'a';
+        return rv;
+    }
+    else
+    {
+        return ch;
+    }
+}
