@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+int main(int argc, char *argv[])
+{
+
+    if(argc!=2)
+    {
+        printf("Usage: ./recover FILE\n");
+        return 1;
+    }
+    FILE *card=fopen(argv[1],"rb");
+    FILE *output= NULL;
+    char file[8];
+
+    uint8_t buffer[512];
+    int c=0;
+    while(fread(buffer,1,512,card)!=0)
+    {
+        if(buffer[0]==0xff&&buffer[1]==0xd8&&buffer[2]== 0xff&&(buffer[3] & 0xf0) == 0xe0)
+       {
+            if(output != NULL)
+             {
+               fclose(output);
+             }
+           sprintf(file, "%03i.jpg", c);
+           output = fopen(file, "wb");
+           c++;
+       }
+if(output != NULL)
+   {
+    fwrite(buffer, 1, 512, output);
+   }
+   }
+   fclose(output);
+   fclose(card);
+}
